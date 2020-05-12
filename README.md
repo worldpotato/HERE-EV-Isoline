@@ -1,6 +1,6 @@
 ![HERE Logo](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/img/hereWsLogo.png) 
 
-In this workshop we will learn to use the JS and REST APIs from the HERE Location Suite.
+In this workshop we will learn to use the Maps, Geocoding and Search, Routing JS APIs from the HERE Location Suite.
 
 #### Step 1 : We render a map and place a marker on our current position
 #### Step 2 : We search for all EV charging stations around us and place markers on them
@@ -17,7 +17,8 @@ In this workshop we will learn to use the JS and REST APIs from the HERE Locatio
 
 # Let's begin!
 
-[![Foo](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/img/s1.png)](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/Step1.md) 
+[![Foo](/img/s1.png)](/Step1.md) 
+
 
 
 

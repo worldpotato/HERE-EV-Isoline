@@ -22,7 +22,7 @@ Add the following code before </script> tag
                             });
                         }
                 }
-                
+
                 geocoder.browse(geocoderParams,onResult,alert);
             }
 
@@ -30,5 +30,5 @@ Add the following code before </script> tag
 ```
 </br> Double-click on saved file to view on browser
 
-[![Foo](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/img/s3.png)](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/Step3.md) 
+[![Foo](/img/s3.png)](/Step3.md)
 
