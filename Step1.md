@@ -1,7 +1,14 @@
+## Download the ide [VSCODE](https://code.visualstudio.com/download)
+## Install the extension Live Server by Ritwick Dey
+This makes it super easy to see your application on your browser.
 
-Open your favourite IDE or a simple code editor like notepad or notepad++
+![Live Server Extension](img/live_server.png) 
 
-Copy the code below into your editor.
+## Create a folder named Workshop_With_HERE
+- In VSCODE click on File > Open.. 
+- Open the folder Food_Delivery_With_HERE
+- Click on File > New File and save it as 'index.html' within the folder
+
 
 ``` html
 <!DOCTYPE html>
@@ -47,23 +54,27 @@ Copy the code below into your editor.
     </body>
 </html>
 ```
-# Save the file as HERE_JS_Workshop.html
-
-</br> Double-click on saved file to view on browser
-
 # Adding a position marker using map object of Interactive maps API
-Add the following code before </script> tag
+- Add a folder named *img* inside the folder Workshop_With_HERE
+- Inside the folder *img*, save the image you want as the icon for EV charging stations and home
+- You can also download the ones I used for [home](img/home.png) and [EV Charging stations](img/EV.png)
+- Add the following code before </script> tag
+
 
 ```javascript
-            // create a marker object 
+            // create an icon for the marker. Choose any image you want. I created mine using draw.io 
+            
+            var homeIcon = new H.map.Icon('img/home.png'); 
 
-            var posMarker = new H.map.Marker(myPos);
+            // Create a marker object with postion and marker icon
+
+            var posMarker = new H.map.Marker(myPos,{icon:homeIcon});
             
             // Add the marker to the map 
 
             map.addObject(posMarker);
 ```
-</br> Double-click on saved file to view on browser
+### Click on the 'Go Live' button at the bottom right of your VSCODE application window or or press 'cmd + L cmd + O '/ 'ctrl + L ctrl + O ' and see your application open in your default browser
 
 [![Foo](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/img/s2.png)](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/Step2.md) 
 

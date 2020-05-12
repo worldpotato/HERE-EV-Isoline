@@ -13,7 +13,7 @@ Add the following code before </script> tag
 
             drawCircle();
 ```
-</br> Double-click on saved file to view on browser
+</br>Save file to view the changes
 
 
 [![Foo](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/img/s4.png)](https://github.com/kuberaspeaking/HERE-JS-workshop/blob/master/Step4.md) 

@@ -35,7 +35,9 @@
 
             var behavior = new H.mapevents.Behavior(mapEvents);
 
-            var icon = new H.map.Icon('img/home_logo.png');
+            var icon = new H.map.Icon('img/home.png');
+            var evIcon = new H.map.Icon('img/EV.png');
+    
             if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 // console.log(position);
@@ -54,41 +56,28 @@
                     tilt: 60});
 
                 function displayEV(){
-                    let params = {
-                        "apiKey": "KUFJZlg1QpKnIqlMlodmDXeu7nNktr2-caRXFHpxgSI",
-                        "in":  markerPosition.lat + ',' + markerPosition.lng +";r=1000000",       // meters
-                        "cat": "EV-charging-station",
-                        "size": "500"
+                    var geocoder = platform.getSearchService();
+                    let geocoderParams = {
+                        at : markerPosition.lat + ',' + markerPosition.lng,
+                        categories: '700-7600-0322'
                     }
 
-                    let query = Object.keys(params)
-                        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-                        .join('&')
+                    function onResult(result){
+                        console.log(result);
+                        if(result.items){
 
-                    let url = 'https://places.ls.hereapi.com/places/v1/browse?' + query;
+                            result.items.forEach(item => {
+                                let evMarker = new H.map.Marker(item.position,{ icon: evIcon }); 
+                                let respData = item.title;
+                                evMarker.setData(respData);
+                                map.addObject(evMarker);
 
+                            });
+                        }
+                        
+                    }
 
-                    fetch(url, {
-                        "method": "GET"
-                    })
-                    .then(response => response.json())
-                    .then(response => {
-                        console.log(response);
-                        // create a marker object
-                        for (i=0; i < response.results.items.length; i++){  
-                        newPos= ({lat: response.results.items[i].position[0], lng: response.results.items[i].position[1]});
-                        respData = response.results.items[i].title;
-                        addMarker(newPos,respData);
-                        // printInfo()
-                        } 
-                    })
-                }
-
-                function addMarker(newPos,respData){
-                    var evIcon = new H.map.Icon('img/EV.png');
-                    evMarker = new H.map.Marker(newPos,{ icon: evIcon });
-                    evMarker.setData(respData);
-                    map.addObject(evMarker);
+                    geocoder.browse(geocoderParams,onResult,alert);
                 }
 
                 function addInfoBubble(map){
@@ -106,8 +95,8 @@
                 addInfoBubble(map);
 
                 var customStyle = {
-                    strokeColor: 'dark green',
-                    fillColor: 'rgba(0, 255, 100, 0.2)',
+                    strokeColor: 'pink',
+                    fillColor: 'rgba(252, 194, 215,0.8)',
                     lineWidth: 1,
                 };
 
@@ -119,54 +108,56 @@
                 drawCircle();
 
 
-                var myLoc = markerPosition.lat + ',' + markerPosition.lng;
-                var routingParams = {
-                    'mode': 'fastest;car;',
-                    'start': myLoc,
-                    'range': '600', // 10 (10x60secs) minutes of driving 
-                    'rangetype': 'time'
-                };
+                
 
-                // Define a callback function to process the isoline response.
-                var onResult = function(result) {
-                    var center = new H.geo.Point(
-                        result.response.center.latitude,
-                        result.response.center.longitude),
-                    isolineCoords = result.response.isoline[0].component[0].shape,
-                    linestring = new H.geo.LineString(),
-                    isolinePolygon,
-                    isolineCenter;
+                function drawIsoline(){
+                    // Get an instance of the routing service:
+                    var router = platform.getRoutingService();
+                    //  Define Isoline routing parameters
+                    var routingParams = {
+                        'mode': 'fastest;car;',
+                        'start': markerPosition.lat + ',' + markerPosition.lng,
+                        'range': '600', // 10 (10x60secs) minutes of driving 
+                        'rangetype': 'time'
+                    };
 
-                    // Add the returned isoline coordinates to a linestring:
-                    isolineCoords.forEach(function(coords) {
-                        linestring.pushLatLngAlt.apply(linestring, coords.split(','))
-                    })
+                    // Define a callback function to process the isoline response.
+                    var onResult = function(result) {
+                        var center = new H.geo.Point(
+                            result.response.center.latitude,
+                            result.response.center.longitude),
+                        isolineCoords = result.response.isoline[0].component[0].shape,
+                        linestring = new H.geo.LineString(),
+                        isolinePolygon,
+                        isolineCenter;
 
-                    // Create a polygon and a marker representing the isoline:
-                    isolinePolygon = new H.map.Polygon(linestring);
-                    //   isolineCenter = new H.map.Marker(center)
+                        // Add the returned isoline coordinates to a linestring:
+                        isolineCoords.forEach(function(coords) {
+                            linestring.pushLatLngAlt.apply(linestring, coords.split(','))
+                        })
 
-                    // Add the polygon and marker to the map:
-                    map.addObject(isolinePolygon);
+                        // Create a polygon and a marker representing the isoline:
+                        isolinePolygon = new H.map.Polygon(linestring);
+                        //   isolineCenter = new H.map.Marker(center)
 
-                    // Center and zoom the map so that the whole isoline polygon is
-                    // in the viewport:
+                        // Add the polygon and marker to the map:
+                        map.addObject(isolinePolygon);
 
-                    map.getViewModel().setLookAtData({bounds: isolinePolygon.getBoundingBox()});
+                        // Center and zoom the map so that the whole isoline polygon is
+                        // in the viewport:
+
+                        map.getViewModel().setLookAtData({bounds: isolinePolygon.getBoundingBox()});
+                    }
+
+                    // Call the Routing API to calculate an isoline:
+                    router.calculateIsoline(routingParams,onResult,function(error) {
+                        alert(error.message);
+                        }
+                    );
+
                 }
 
-                // Get an instance of the routing service:
-                var router = platform.getRoutingService();
-
-                // Call the Routing API to calculate an isoline:
-                router.calculateIsoline(
-                    routingParams,
-                    onResult,
-                    function(error) {
-                        alert(error.message);
-                    }
-                );
-
+                drawIsoline();
 
                 });
 

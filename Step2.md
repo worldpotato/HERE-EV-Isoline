@@ -5,37 +5,28 @@
 Add the following code before </script> tag
 ```javascript
             function displayEV(){
-                let params = {
-                    "apiKey": "YOUR_REST_APIKEY",
-                    "in":  myPos.lat + ',' + myPos.lng +";r=10000",       // meters
-                    "cat": "EV-charging-station",
-                    "size": "500"
-                };
+                var geocoder = platform.getSearchService();
+                let geocoderParams = {
+                    at : markerPosition.lat + ',' + markerPosition.lng,
+                    categories: '700-7600-0322'
+                }
 
-                let query = Object.keys(params)
-                    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-                    .join('&');
+                function onResult(result){
+                        console.log(result);
+                        if(result.items){
 
-                let url = 'https://places.ls.hereapi.com/places/v1/browse?' + query;
+                            result.items.forEach(item => {
+                                let evMarker = new H.map.Marker(item.position,{ icon: evIcon }); 
+                                let respData = item.title;
+                                evMarker.setData(respData);
+                                map.addObject(evMarker);
 
+                            });
+                        }
+                        
+                }
 
-                fetch(url, {
-                    "method": "GET"
-                })
-                .then(response => response.json())
-                .then(response => {
-                    console.log(response);
-                    // create a marker object
-                    for (i=0; i < response.results.items.length; i++){  
-                        newPos= ({lat: response.results.items[i].position[0], lng: response.results.items[i].position[1]});
-                        addMarker(newPos);
-                    } 
-                })
-            }
-
-            function addMarker(newpos){
-                evMarker = new H.map.Marker(newPos);
-                map.addObject(evMarker)
+                geocoder.browse(geocoderParams,onResult,alert);
             }
 
             displayEV();
