@@ -9,7 +9,8 @@ Add the following code before </script> tag
                 var geocoder = platform.getSearchService();
                 let geocoderParams = {
                     at : markerPosition.lat + ',' + markerPosition.lng,
-                    categories: '700-7600-0322'
+                    categories: '700-7600-0322' // Category for EV Charging Station
+                  // Find more categories here : https://developer.here.com/documentation/geocoding-search-api/dev_guide/topics-places/introduction.html
                 }
 
                 function onResult(result){
