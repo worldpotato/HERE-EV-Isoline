@@ -6,7 +6,7 @@ This makes it super easy to see your application on your browser.
 
 ## Create a folder named Workshop_With_HERE
 - In VSCODE click on File > Open.. 
-- Open the folder Food_Delivery_With_HERE
+- Open the folder Workshop_With_HERE
 - Click on File > New File and save it as 'index.html' within the folder
 
 
