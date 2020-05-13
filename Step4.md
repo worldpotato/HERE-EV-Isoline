@@ -9,7 +9,7 @@ Add the following code before </script> tag
                     //  Define Isoline routing parameters
                     var routingParams = {
                         'mode': 'fastest;car;',
-                        'start': markerPosition.lat + ',' + markerPosition.lng,
+                        'start': myPos.lat + ',' + myPos.lng,
                         'range': '600', // 10 (10x60secs) minutes of driving 
                         'rangetype': 'time'
                     };
